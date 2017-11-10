@@ -1,5 +1,6 @@
 import processor
 import numpy as np
+import operator
 
 
 NUM_HL = 2
@@ -16,10 +17,8 @@ def d_sigmoid(x):
 
 
 def cost(result, target):
-	target_array = np.zeros((FINAL_SIZE, 1))
-	target_array[target][0] = 1
-	cost_array = (target_array - result)**2
-	d_cost_array = 2*(target_array-result)
+	cost_array = (target - result)**2
+	d_cost_array = 2*(target-result)
 	cost = np.sum(cost_array)
 	return (cost_array, d_cost_array, cost)
 
@@ -42,20 +41,30 @@ class net(object):
 		for (weight, bias) in self.w_and_b:
 			result = weight.dot(activation) + bias
 			activation = sigmoid(result)
-			[(activation, result)] + activations
+			activations = [(activation, result)] + activations
 		return activations
 
-	def train():
-		batch = self.data_set.make_minibatches(1000)
+	def train(self):
 		size = self.data_set.size/1000
-		
-		for (picture, label) in batch:
+		batches = self.data_set.make_minibatches(1000)
+		for batch in batches:
+			target = np.zeros((FINAL_SIZE, 1))
+			activations = [np.zeros((FINAL_SIZE, 1)) for i in range(NUM_HL+1)]
+			for (picture, label) in batch:
+				test = self.feed_foward(picture)
+				activations = map(operator.add, activations, test)
+				target[label][0] += 1
+			target = target/size
+			activations = activations/size
+			print cost(activations, target)[0]
+			backprop(activations, target)
 
 
 
-	def backprop(activations, cost, label)
 
-		d_cost = 2*(act_l[0]-cost[0])
+	def backprop(activations, target):
+
+		d_cost = 2*(activations[0]-target)
 		for l in range(NUM_HL+1):
 			act_l = activations[l]
 			act_l_minus = activations[l+1]
