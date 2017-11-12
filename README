@@ -1,0 +1,7 @@
+A neural network designed to read handwritten numbers from the MNIST database.
+
+create.py will take a name and create a network with that name.
+
+train.py will take a name and int and train the neural network on the training set the number of times indicated.
+
+guess.py will take a name and an int and have the network guess a number of times. It will the print the accuracy of the network.
