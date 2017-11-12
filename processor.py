@@ -33,3 +33,15 @@ class processor(object):
 		for x in self.data:
 			batches[random.randint(0, num_batches-1)].append(x)
 		return batches
+
+	def shuffle_data(self):
+		self.data = random.shuffle(self.data)
+
+	def get_point(self):
+		return self.data[random.randint(0, self.size)]
+
+
+
+
+
+
